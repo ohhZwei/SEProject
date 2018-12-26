@@ -1,0 +1,266 @@
+<%- include ../layouts/header.ejs %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div id="item-list" class="col-sm-2">
+            <a href="#" class="list-group-item active">发布单位管理</a>
+
+            <a href="/routes/su" class="list-group-item">
+                返回通知列表</a>
+            <div class="list-group-item" onclick="addAdmin()">
+                增加发布单位
+            </div>
+            <div class="list-group-item" onclick="deleteAdmin()">
+                管理发布单位
+            </div>
+
+        </div>
+        <div class="col-sm-10">
+            <ol class="breadcrumb">
+                <li class="active">发布单位管理
+                </li>
+            </ol>
+            <div id="wrapper" class="panel panel-default">
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+  function addAdmin() {
+    $('#wrapper').empty().append(`
+      <div class="panel-heading">
+          添加单位
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive input-form">
+            <form onsubmit="return CheckPass()" action="/routes/su/doAdd" method="post">
+              <ul>
+                <li> 登录账号: </li><input type="text" class="form-control" id="username" onblur="isExisted()" name="username" style="display: inline-block"">
+                <span id="tipForUsername"></span>
+                <br/>
+                <li> 登录密码: </li><input type="password" class="form-control" name="password" id="password""/>
+                <li> 确认密码: </li><input type="password" class="form-control" name="passwordrepeate" id="passrepeate" style="display: inline-block""/>
+                <span id="passrepeateerror"></span>
+                <br/>
+                <li> 单位名称: </li><input type="text" class="form-control" name="department_name"/>
+                <li> 单位等级: </li><input type="text" class="form-control" name="status"/>
+                <li>
+                  <br/>
+                  <button type="submit" class="btn btn-default" id="adduser">确认添加</button>
+                </li>
+
+              </ul>
+
+            </form>
+          </div>
+        </div>
+      `)
+  }
+  function deleteAdmin() {
+    $('#wrapper').empty().append(`
+      <div class="panel-heading">
+          删除单位
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive input-form">
+            <table  class="table table-bordered text-center">
+				<thead class="text-center">
+					<tr>
+						<th class="text-center">序号</th>
+						<th class="text-center">
+							单位名称
+						</th>
+						<th class="text-center">
+							登录名
+						</th>
+						<th class="text-center">
+							密码
+						</th>
+						<th class="text-center">
+							操作
+						</th>
+					</tr>
+				</thead>
+				<tbody id="department-list">
+
+				</tbody>
+			</table>
+          </div>
+        </div>`)
+    $.ajax({
+      url: 'http://127.0.0.1:8001/routes/user/departmentList',
+      type: 'get',
+      dataType: 'json',
+      success: function (res) {
+
+        console.log(res);
+        for (let i = 0; i < res.length; i++) {
+          $('#department-list').append(`
+            <tr>
+				<td>
+					${i + 1}
+				</td>
+				<td>
+					${res[i].department_name}
+				</td>
+				<td>
+					${res[i].username}
+				</td>
+				<td>
+					**********************
+				</td>
+				<td >
+					<a class="btn btn-danger btn-primary  btn-sm" onclick="editAdmin('${res[i]._id}')">修改</a>
+					<a class="btn btn-default btn-primary  btn-sm" onclick="check('${res[i]._id}')" >删除</a>
+				</td>
+			</tr>
+          `)
+        }
+
+      },
+      error: function (xhr) {
+        //readyState=4
+        console.log('error', xhr)
+      },
+    })
+
+
+  }
+  function check(id) {
+    if (confirm('是否确认删除？')) {
+      $.ajax({
+        url: 'http://127.0.0.1:8001/routes/su/deleteAdmin',
+        type: 'get',
+        data: {id},
+        dataType: 'json',
+        success: function (res) {
+          console.log(res);
+          $('#department-list').empty()
+          for (let i = 0; i < res.length; i++) {
+            $('#department-list').append(`
+            <tr>
+				<td>
+					${i + 1}
+				</td>
+				<td>
+					${res[i].department_name}
+				</td>
+				<td>
+					${res[i].username}
+				</td>
+				<td>
+					${res[i].password}
+				</td>
+				<td >
+					<a class="btn btn-danger btn-primary  btn-sm"  onclick="editAdmin('${res[i]._id}')" >修改</a>
+					<a class="btn btn-default btn-primary  btn-sm" onclick="check('${res[i]._id}')" >删除</a>
+				</td>
+			</tr>
+          `)
+          }
+        },
+        fail: function () {
+          console.log('删除失败');
+        }
+      })
+    }
+  }
+  //edit admin information
+  function editAdmin(id) {
+    $.ajax({
+      url: 'http://127.0.0.1:8001/routes/su/editAdmin',
+      type: 'get',
+      data: {id},
+      dataType: 'json',
+      success: function (res) {
+        console.log(res);
+        $('#wrapper').empty().append(`
+            <div class="panel-heading">
+              修改单位信息
+            </div>
+            <div class="panel-body">
+              <div class="table-responsive input-form">
+                <form onsubmit="return CheckPass()" action="/routes/su/doEditAdmin" method="post">
+                  <ul>
+                    <li><input type="hidden" name="_id" value="${res._id}"/></li>
+                    <li> 登录账号: </li><input type="text" name="username" value="${res.username}" class="form-control" readonly unselectable="on"/>
+                    <li> 登录密码: </li><input type="password" name="password" id="password" class="form-control"/>
+                    <li> 确认密码: </li><input type="password" name="passwordrepeate" id="passwordrepeate" class="form-control" style="display: inline-block"/>
+                    <span id="passrepeateerror"></span>
+                    <br/>
+                    <li> 单位名称: </li><input type="text" name="department_name" value="${res.department_name}" class="form-control" readonly unselectable="on"/>
+                    <li> 单位等级: </li><input type="text" name="status" value="${res.status}" class="form-control" readonly unselectable="on"/>
+                    <li>
+                      <br/>
+                      <button type="submit" class="btn btn-default">确认修改</button>
+                    </li>
+                  </ul>
+                </form>
+              </div>
+            </div>
+        `)
+      }
+    })
+  }
+
+  function isExisted() {
+
+
+    let minLength = 4
+    let username = $("#username").val().trim()
+    console.log(username);
+
+    if(username.length==0){
+
+        $("#tipForUsername").html("用户名不能为空")
+    }
+
+    else if (username.length < minLength) {
+      $("#tipForUsername").html("用户名长度必须不小于4个字符");
+    } else {
+      $.get('/routes/su/isExisted', {username}, function (res) {
+        if (parseInt(res.isExisted)) {
+          console.log('ceshi');
+          $("#username").val('')
+          $("#tipForUsername").html(" 该用户名已存在 ")
+        }
+      })
+    }
+
+
+  }
+
+
+  function CheckPass() {
+    var pass1 = document.getElementById('password');
+    var pass2 = document.getElementById('passwordrepeate');
+    if (pass1.value.length == 0) {
+      document.getElementById('passrepeateerror').innerHTML = '请输入修改的密码';
+      return false;
+    }
+    else if (pass1.value != pass2.value) {
+      document.getElementById('passrepeateerror').innerHTML = '两次输入的密码不一致';
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+
+  $(document).ready(function () {
+    deleteAdmin()
+  })
+
+</script>
+</html>

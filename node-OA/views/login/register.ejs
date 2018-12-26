@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>用户注册</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <script src="/bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+
+</head>
+<body style="background:#acc6d0">
+        <div class="registerarea">
+            <form onsubmit="return checkInput()" class="form-horizontal" action="/routes/login/doRegister"
+                  method="post">
+
+                <span class="heading">普通用户注册</span>
+
+                <div class="form-group">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="用户名">
+                    <span id="emailerror"></span>
+                </div>
+                <div class="form-group help">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="密　码">
+                    <span id="passerror"></span>
+                </div>
+                <div class="form-group help">
+                    <!--不设置name属性就不会提交到后台-->
+                    <input type="password" id="password-confirm" class="form-control" placeholder="再次输入 密码">
+                    <span id="passrepeaterror"></span>
+                </div>
+                <div class="form-group help">
+                    <!--不设置name属性就不会提交到后台-->
+                    <input type="text" id="check-code" class="form-control" placeholder="请输入注册码">
+                    <span id="checkcodeerror"></span>
+                </div>
+                <div class="form-group">
+                    <input id="btn" type="submit" class="form-control btn btn-default" value="注册">
+                </div>
+                <div class="footarea">
+                    <br/>
+                    <footer>
+                        <a style="color: #3a92af" href="/routes/login">已有账号？去登录</a>
+                    </footer>
+                </div>
+            </form>
+
+        </div>
+
+
+</body>
+<script>
+
+  //输入检查
+  function checkInput() {
+
+    let username = $("#username").val().trim()
+    let password = $("#password").val().trim()
+    let password_confirm = $("#password-confirm").val().trim()
+    var checkcode = document.getElementById('check-code');
+
+      if (!username) {
+          alert('每一项均为必填，请细心填写')
+          return false
+      }
+
+      if (password.length < 8) {
+          document.getElementById('passerror').innerHTML = '密码长度不能低于8位';
+          document.getElementById('passrepeaterror').innerHTML = '';
+          return false
+      }
+      else if (password_confirm != password) {
+          document.getElementById('passerror').innerHTML = '';
+          document.getElementById('passrepeaterror').innerHTML = '两次密码输入不一致';
+          return false
+      }
+      else if (checkcode.value != '4297f44b13955235245b2497399d7a93') {
+          document.getElementById('passerror').innerHTML = '';
+          document.getElementById('passrepeaterror').innerHTML = '';
+          document.getElementById('checkcodeerror').innerHTML = '请输入正确的注册码';
+          return false
+
+      }
+      else {
+          return true
+      }
+
+  }
+
+  $(document).ready(function () {
+    //保证用户名唯一
+    $("#username").blur(function () {
+      $.get('/routes/login/isExisted', {username: $('#username').val().trim()}, function (res) {
+        if (res.isExisted) {
+
+          if (confirm("该用户名已存在，点击'确定'进行登录，点击'取消'重新输入")) {
+            location.href = '/routes/login'
+          }else{
+            $("#username").val('')
+          }
+
+        }
+
+      })
+    })
+
+    $("#password").change(function () {
+      if ($('#password').val().trim().length < 8) {
+          document.getElementById('passerror').innerHTML = '密码长度不能低于8位'
+      }
+    })
+
+  })
+
+</script>
+</html>

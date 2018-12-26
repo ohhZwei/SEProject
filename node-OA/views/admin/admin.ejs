@@ -1,0 +1,121 @@
+<%- include ../layouts/header.ejs %>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div id="department-list" class="col-sm-2">
+      <a href="#" class="list-group-item active">通知管理</a>
+
+      <a href="/routes/admin" class="list-group-item">
+        通知列表</a>
+      <a href="/routes/admin/add" class="list-group-item">
+        发布通知</a>
+
+    </div>
+    <div class="col-sm-10">
+      <ol class="breadcrumb">
+        <li class="active">通知管理
+        </li>
+        <li class="active">已发布通知
+        </li>
+      </ol>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          搜索
+        </div>
+        <div class="panel-body">
+          <div role="form" class="form-inline">
+            <div class="form-group">
+              <label for="name">名称</label>
+              <input type="text" class="form-control" id="keyword" placeholder="请输入标题关键字">
+            </div>
+
+            <div class="form-group">
+              <div type="submit" id="search" class="btn btn-default">开始搜索</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--
+          列表展示
+      -->
+      <div class="table-responsive">
+        <table class="table table-striped ">
+          <thead>
+          <tr>
+            <th>编号</th>
+            <th>标题</th>
+            <th>发布单位</th>
+            <th>日期</th>
+            <th class="text-center">操作</th>
+          </tr>
+          </thead>
+          <tbody id="info-list">
+          <% for(let i = 0;i < list.length;i++){ %>
+          <tr>
+            <td><%= i + 1 %></td>
+            <td class="titletd"><a href="<%= '/routes/content?id='+list[i]._id %>" target="_blank"><%= list[i].title %></a></td>
+            <td class="usertd"><%= list[i].department_name %></td>
+            <td><%= list[i].date %></td>
+            <td class="text-center">
+              <a href="<%= '/routes/admin/edit?id='+list[i]._id %>"  class="btn btn-success btn-sm">修改</a>
+              <a href="<%= '/routes/content/delete?id='+list[i]._id %>" class="btn btn-danger btn-sm">删除</a>
+            </td>
+          </tr>
+          <% } %>
+
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+<script>
+  $("#search").click(function () {
+    let keyword = $('#keyword').val().trim()
+    let department_name = $("#userinfo-department").html().trim()
+    console.log(keyword);
+    console.log(department_name);
+    if (keyword != '') {
+      $.ajax({
+        url: 'http://127.0.0.1:8001/routes/admin/search',
+        type: 'get',
+        data: {keyword,department_name},
+        dataType: 'json',
+        success: function (res1) {
+
+          if (res1.length != 0) {
+            $("#info-list").empty()
+            for (let i = 0; i < res1.length; i++) {
+              $("#info-list").append(`
+                <tr>
+                    <td>${i + 1 }</td>
+                   <td><a href="/routes/content?id=${res1[i]._id}"  target="_blank">${res1[i].title}</a></td>
+                    <td>${res1[i].department_name}</td>
+                    <td>${res1[i].date}</td>
+                     <td class="text-center">
+                        <a href="/routes/content?id=${res1[i]._id}" class="btn  btn-success btn-sm">修改</a>
+                        <a href="/routes/content/delete?id=${res1[i]._id}" class="btn btn-danger btn-sm">删除</a>
+                     </td>
+                </tr>
+               `)
+            }
+          }else{
+            alert('未找到相应内容')
+          }
+        },
+        error: function (xhr) {
+          //readyState=4
+          console.log('error', xhr)
+        },
+      })
+
+    }
+
+
+  })
+</script>
+</html>

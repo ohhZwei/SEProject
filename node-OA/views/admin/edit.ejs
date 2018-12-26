@@ -1,0 +1,88 @@
+<%- include ../layouts/header.ejs %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2">
+      <a href="#" class="list-group-item active">通知管理</a>
+
+      <a href="/routes/admin" class="list-group-item">
+        通知列表</a>
+      <a href="/routes/admin/add" class="list-group-item">
+        增加发布单位</a>
+    </div>
+    <div class="col-sm-10">
+      <ol class="breadcrumb">
+        <li class="active">通知管理
+        </li>
+        <li class="active">发布通知
+        </li>
+      </ol>
+      <div class="panel panel-default">
+
+        <div class="panel-heading">
+          添加发布
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive input-form">
+            <form onsubmit="return CheckInput()" action="/routes/admin/doEdit" method="post" enctype="multipart/form-data">
+              <ul>
+                <li><input type="hidden" name="_id" value="<%=info._id%>" /></li>
+                <li><input type="hidden" name="department_name" value="<%=info.department_name%>" /></li>
+                <li><input type="hidden" name="date" value="<%=info.date%>" /></li>
+                <li> 标题: </li><input type="text" name="title" class="form-control" id="title" value="<%=info.title%>"/>
+                <span id="titleerror"></span>
+                <li>内容:</li><textarea name="content" cols="60" rows="15" class="form-control" id="content"><%=info.content%></textarea>
+                <span id="contenterror"></span>
+                <% if(info.path[0].name.length > 0) {%>
+                  <% for(let i = 0;i < info.path.length;i++) { %>
+
+                    <label>附件<%= i+1 %>&nbsp;<a
+                              href="/<%= info.path[i].path %>"><%= info.path[i].name %></a></label>
+
+                  <% } %>
+                <%}%>
+                <li> 重新选择附件: <input type="file" multiple="multiple" name="file" /></li>
+
+                <li>
+
+                  <button type="submit" class="btn btn-default">提交</button>
+                </li>
+              </ul>
+
+            </form>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+
+<script>
+    function CheckInput() {
+        var title = document.getElementById('title');
+        var content = document.getElementById('content');
+
+        if (title.value.length == 0) {
+            document.getElementById('titleerror').innerHTML = '信息标题不能为空';
+            return false;
+        }
+        else if (title.value.length >= 40) {
+            document.getElementById('titleerror').innerHTML = '信息标题不能超过40个字符';
+            return false;
+        }
+        else if (content.value.length == 0) {
+            document.getElementById('titleerror').innerHTML = '';
+            document.getElementById('contenterror').innerHTML = '信息内容不能为空';
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+</script>
+</html>

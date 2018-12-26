@@ -1,0 +1,56 @@
+ul{
+    list-style-type: none;
+}
+.input-form li{
+    margin: 5px 0px;
+}
+.navbar-header{
+    width: 180px;
+    text-align: center;
+}
+.navbar-inverse .navbar-nav>li>a{
+    color:#f9f9f9;
+}
+.navbar-inverse{
+    background:#46473F;
+}
+
+.breadcrumb {
+    padding: 10px 15px;
+    margin: 0 0 15px 0;
+}
+
+.switchpage {
+    display: inline-block;
+}
+
+.titletd {
+    width: 650px;
+}
+
+.usertd {
+    width: 200px;
+}
+
+#totalPage {
+    margin-left: 15px
+}
+
+#department-list {
+    margin-top: 20px;
+}
+
+#passrepeateerror , #tipForUsername{
+    color: #c12e2a;
+    font-size: 1.5rem;
+    height: 20px;
+    line-height: 30px;
+}
+input[type=file]{
+ display: inline !important;
+
+}
+
+article {
+    white-space: pre-line;
+}

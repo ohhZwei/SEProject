@@ -1,0 +1,198 @@
+<%- include layouts/header.ejs %>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div id="department-list" class="col-sm-2">
+            <div class="list-group-item active">发布单位</div>
+            <% for(let i = 0;i < department_list.length;i++){ %>
+            <div style="cursor: pointer" class="list-group-item"><%= department_list[i] %></div>
+            <% } %>
+        </div>
+        <div class="col-sm-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    搜索
+                </div>
+                <div class="panel-body">
+                    <div role="form" class="form-inline">
+                        <div class="form-group">
+
+                            <input type="text" class="form-control" id="keyword" placeholder="请输入关键字">
+                        </div>
+
+                        <div class="form-group">
+                            <div id="search" type="submit" class="btn btn-default">开始搜索</div>
+                        </div>
+                        &nbsp;&nbsp;
+
+                        <div class="form-group">
+                            <div id="pre" class="btn btn-default btn-sm">上一页</div>
+                            &nbsp;&nbsp;
+                            <label id="pageIndex">1</label>
+                            &nbsp;&nbsp;
+                            <div id="after" class="btn btn-default  btn-sm">下一页</div>
+                        </div>
+                        <div id="totalPage" class="form-group">
+                        </div>
+                    </>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+                <table class="table table-striped ">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>标题</th>
+                        <th>发布单位</th>
+                        <th>日期</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="info-list">
+
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+  $(document).ready(function () {
+
+    //列表项点击背景颜色处理函数
+    function onClick(obj) {
+      for (let o = 1; o < divs.length; o++) {
+        if (divs[o] == obj) {
+          divs[o].style.backgroundColor = '#DFEBF2';
+        }
+        else {
+          divs[o].style.backgroundColor = '';
+        }
+      }
+    }
+
+
+    //xhr封装函数
+    function getData(department) {
+      $.ajax({
+        url: 'http://127.0.0.1:8001/routes/content/message',
+        type: 'post',
+        data: {department},
+        dataType: 'json',
+        success: function (res) {
+          len = res.length;
+          getPage(res, parseInt($('#pageIndex').html()))
+          $('#totalPage').html(len + " 条信息  , " + "共  " +  Math.ceil(len / 10) + "  页")
+        },
+        error: function (xhr) {
+          //readyState=4
+          console.log('error', xhr)
+        },
+      })
+
+    }
+
+    //当前所在页数处理
+    function changeIndex() {
+      let pageIndex = parseInt($('#pageIndex').html());
+      let pageCount = Math.ceil(len / 10)
+      if (this.id == 'pre') {
+        pageIndex == 1 ? $('#pageIndex').html(1) : $('#pageIndex').html(pageIndex - 1)
+
+      } else {
+        pageIndex == pageCount ? $('#pageIndex').html(pageCount) : $('#pageIndex').html(pageIndex + 1)
+      }
+      getData(depatment_name)
+    }
+
+    //页面渲染函数
+    function getPage(res, index) {
+      let pageIndex = parseInt($('#pageIndex').html())
+      let res1 = res.slice((index - 1) * 10, index * 10)
+      $("#info-list").empty();
+      for (let i = 0; i < res1.length; i++) {
+        $("#info-list").append(`
+                <tr>
+                    <td>${i + 1 + 10 * (pageIndex - 1)}</td>
+                   <td class="titletd"><a href="/routes/content?id=${res1[i]._id}"  target="_blank">${res1[i].title}</a></td>
+                    <td class="usertd">${res1[i].department_name}</td>
+                    <td>${res1[i].date}</td>
+
+                </tr>
+               `)
+      }
+    }
+
+    let depatment_name = '发布单位'
+    let divs = $('#department-list').children()
+
+    //注册点击事件
+    for (var i = 0; i < divs.length; i++) {
+      divs[i].onmousedown = function (e) {
+        onClick(this);
+        depatment_name = this.innerHTML.trim();
+        $('#pageIndex').html(1)
+        getData(depatment_name)
+      }
+    }
+    $("#search").click(function () {
+      let keyword = $('#keyword').val().trim()
+      if (keyword != '') {
+        $.ajax({
+          url: 'http://127.0.0.1:8001/routes/su/search',
+          type: 'get',
+          data: {keyword},
+          dataType: 'json',
+          success: function (res1) {
+
+            if (res1.length != 0) {
+              $("#info-list").empty()
+              for (let i = 0; i < res1.length; i++) {
+                $("#info-list").append(`
+                <tr>
+                    <td>${i + 1 }</td>
+                   <td><a href="/routes/content?id=${res1[i]._id}"  target="_blank">${res1[i].title}</a></td>
+                    <td>${res1[i].department_name}</td>
+                    <td>${res1[i].date}</td>
+
+
+                </tr>
+               `)
+              }
+            }else{
+              alert('未找到相应内容')
+            }
+          },
+          error: function (xhr) {
+            //readyState=4
+            console.log('error', xhr)
+          },
+        })
+
+      }
+
+
+    })
+
+    //翻页事件
+    $("#pre").click(changeIndex)
+    $("#after").click(changeIndex)
+
+    //通知列表初始化
+    getData(depatment_name)
+  })
+</script>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>用户登录</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <script src="/bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+
+</head>
+<body style="background:#acc6d0">
+<div class="container">
+    <div class="row">
+        <div class="loginarea">
+            <form onsubmit="return CheckInput()" class="form-horizontal" action="/routes/login/dologin" method="post">
+                <span class="heading">用户登录</span>
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" id="emailinput" placeholder="用户名">
+                    <i class="fa fa-user"></i>
+                    <span id="emailerror"></span>         <!--用户名错误提示标签-->
+
+                </div>
+                <div class="form-group help">
+                    <input type="password" name="password" class="form-control" id="passwordinput" placeholder="密　码">
+                    <i class="fa fa-lock"></i>
+                    <a href="#" class="fa fa-question-circle"></a>
+                    <span id="passwderror"></span>         <!--密码错误提示标签-->
+                </div>
+                <div class="form-group">
+
+                    <button type="submit" style="background: #3a92af" class="btn btn-default">登录</button>
+                </div>
+                <div class="footarea">
+                    <br/>
+                    <footer>
+                        <a style="color: #3a92af" href="">联系我们</a>
+                        <span class="speratepot">.</span>
+                        <a style="color: #3a92af" href="">关于我们</a>
+                        <span class="speratepot">.</span>
+                        <a style="color: #3a92af" href="/routes/login/register">去注册</a>
+                    </footer>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+<script>
+  function CheckInput() {     /*检查是否为空，为空不提交表单*/
+    var emailinput = document.getElementById("emailinput");
+    var passwordinput = document.getElementById("passwordinput");
+
+    if (emailinput.value.length === 0) {
+      document.getElementById("emailerror").innerHTML = "用户名不能为空";
+      document.getElementById("passwderror").innerHTML = "";
+      return false;
+    }
+    else {
+      document.getElementById("emailerror").innerHTML = "";
+      if (passwordinput.value.length == 0) {
+        document.getElementById("passwderror").innerHTML = "请填写密码";
+        return false;
+      }
+      else
+        return true;
+    }
+  }
+</script>
+</html>

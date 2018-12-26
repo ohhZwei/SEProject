@@ -1,0 +1,22 @@
+{
+  "name": "SE",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "md5": "^2.2.1",
+    "mongodb": "^3.1.10",
+    "multiparty": "^4.2.1",
+    "silly-datetime": "^0.1.2"
+  }
+}

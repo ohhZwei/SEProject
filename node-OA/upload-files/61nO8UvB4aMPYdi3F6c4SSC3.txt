@@ -1,0 +1,1 @@
+该数据有4个属性，前面四个为属性，最后一列为类别，分为三类（Iris-setosa、Iris-versicolor、Iris-virginica）

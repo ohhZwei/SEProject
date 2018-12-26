@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= info.title %></title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <style>
+        .margin {
+            margin: 20px 0;
+        }
+
+        .padding-top {
+            padding-top: 20px;
+        }
+
+        .font-size {
+            font-size: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row text-centerclearfix">
+        <div class="col-md-10 col-md-offset-1 ">
+            <div class="margin  padding-top jumbotron">
+                <div class="h3 text-center">
+                    <%= info.title %>
+                </div>
+                <article class="font-size margin">
+                    <%= info.content %>
+                </article>
+                <div>
+                    <% if(info.path[0].name.length > 0){ %>
+                    <% for(let i = 0;i < info.path.length;i++) { %>
+                    <label>附件<%= i+1 %> &nbsp; &nbsp;<a
+                                href="/<%= info.path[i].path %>"><%= info.path[i].name%></a></label>
+                    <br>
+                    <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

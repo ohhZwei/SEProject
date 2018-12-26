@@ -1,0 +1,50 @@
+#title {
+    float: left;
+    width: 40%;
+    min-width: 300px;
+    margin: 0 0 0 15px;
+}
+
+#content {
+    float: left;
+    width: 80%;
+    min-width: 500px;
+    margin: 0 0 0 15px;
+    resize: none;
+}
+
+#uploadfile {
+    margin: 0 0 15px 15px;
+}
+
+#titleerror , #contenterror{
+    display: block;
+    clear: both;
+    color: #c12e2a;
+    font-size: 1.5rem;
+    margin: 5px 0 5px 0;
+    padding-left:50px;
+    height: 25px;
+    line-height: 30px;  /*提示用户名错误*/
+}
+
+.row ul li {
+    margin: 0;
+    float: left;
+    clear: both;
+}
+
+.panel-body ul li {
+    margin: 5px 5px 0 0;
+}
+
+ul .form-control {
+    width: 30%;
+    margin-bottom: 25px;
+    resize: none;
+}
+
+
+.formarea {
+    width: 900px;
+}

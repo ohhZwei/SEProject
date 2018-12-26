@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="/bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <link rel="stylesheet" href="/css/add.css">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img src="/images/node.jpg" height="44px;"/>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <% if (userinfo.username){%>
+                <li><a id="userinfo-username">欢迎 <%=userinfo.username%></a></li>
+                </li>
+                <% let userType =['普通用户','发布单位','SuperSU']%>
+                <% if(parseInt(userinfo.status)!=1){%>
+                <li><a id="userinfo-username">您是 <%=userType[parseInt(userinfo.status)]%></a></li>
+
+                <%} else{%>
+
+                <li><a id="userinfo-department"><%=userinfo.department_name%></a></li>
+                <%}%>
+
+                <%}%>
+                <li><a href="/routes/login/logout">注销</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
