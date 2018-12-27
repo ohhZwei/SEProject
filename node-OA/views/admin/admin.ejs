@@ -59,7 +59,7 @@
             <td><%= list[i].date %></td>
             <td class="text-center">
               <a href="<%= '/routes/admin/edit?id='+list[i]._id %>"  class="btn btn-success btn-sm">修改</a>
-              <a href="<%= '/routes/content/delete?id='+list[i]._id %>" class="btn btn-danger btn-sm">删除</a>
+              <a href="<%= '/routes/content/delete?id='+list[i]._id %>" onclick="return confirm('是否确认删除该通知？')" class="btn btn-danger btn-sm">删除</a>
             </td>
           </tr>
           <% } %>
@@ -98,7 +98,7 @@
                     <td>${res1[i].date}</td>
                      <td class="text-center">
                         <a href="/routes/content?id=${res1[i]._id}" class="btn  btn-success btn-sm">修改</a>
-                        <a href="/routes/content/delete?id=${res1[i]._id}" class="btn btn-danger btn-sm">删除</a>
+                        <a href="/routes/content/delete?id=${res1[i]._id}" onclick="return confirm('是否确认删除该通知？')" class="btn btn-danger btn-sm">删除</a>
                      </td>
                 </tr>
                `)

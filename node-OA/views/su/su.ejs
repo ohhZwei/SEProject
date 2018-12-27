@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-2">
-            <div href="#" class="list-group-item active">通知管理</div>
+            <div href="#" class="list-group-item active">管理</div>
             <a href="/routes/su" class="list-group-item">
                 通知列表</a>
             <a href="/routes/su/adminControll" class="list-group-item">
@@ -142,7 +142,7 @@
                     <td class="usertd">${res1[i].department_name}</td>
                     <td>${res1[i].date}</td>
                       <td class="text-center">
-          <a href="/routes/content/delete?id=${res1[i]._id}" class="btn btn-danger btn-sm">删除</a>
+          <a href="/routes/content/delete?id=${res1[i]._id}" onclick="return confirm('是否确认删除该通知？')" class="btn btn-danger btn-sm">删除</a>
           </td>
 
                 </tr>
@@ -183,7 +183,7 @@
                     <td>${res1[i].department_name}</td>
                     <td>${res1[i].date}</td>
                       <td class="text-center">
-          <a href="/routes/content/delete?id=${res1[i]._id}" class="btn btn-danger btn-sm">删除</a>
+          <a href="/routes/content/delete?id=${res1[i]._id}" onclick="return confirm('是否确认删除该通知？')" class="btn btn-danger btn-sm">删除</a>
           </td>
 
                 </tr>
